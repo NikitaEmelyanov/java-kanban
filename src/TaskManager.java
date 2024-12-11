@@ -8,6 +8,7 @@ public class TaskManager {
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private int idCounter = 1; // Счетчик идентификаторов
 
+
     public int getNextId() { //Логика счетчика ID
         return idCounter++;
     }
@@ -25,6 +26,8 @@ public class TaskManager {
         // Добавление подзадачи к соответствующему эпику
         if (epics.containsKey(subtask.getEpic().getId())) {
             epics.get(subtask.getEpic().getId()).addSubtask(subtask);
+            subtask.getEpic().updateStatus();
+
         }
     }
 
@@ -56,12 +59,31 @@ public class TaskManager {
         tasks.remove(id);
     }
 
-    public void updateTask(Task task) { // Изменение статуса
+    public void deleteSubtaskById(int id) { // Удалить Подзадачу по ID
+        subtasks.remove(id);
+    }
+
+    public void updateTask(Task task) { // Изменение статуса Задачи
         tasks.put(task.getId(), task);
         // Если задача обновляется, также нужно обновить статус эпика, если это подзадача
         if (task instanceof Subtask) {
             Epic epic = ((Subtask) task).getEpic();
             epic.updateStatus(); // Обновляем статус эпика
+
+        }
+    }
+
+    public void updateEpic(Epic epic) { // Изменение статуса Эпика
+        epics.put(epic.getId(), epic);
+        epic.updateStatus(); // Обновляем статус эпика
+    }
+    public void updateSubtask(Subtask subtask) { // Изменение статуса подзадачи
+        tasks.put(subtask.getId(), subtask);
+
+        // Обновление статуса эпика, к которому принадлежит подзадача
+        Epic epic = subtask.getEpic();
+        if (epic != null) {
+            epic.updateStatus(); // Обновление статуса эпика
         }
     }
 
@@ -80,9 +102,15 @@ public class TaskManager {
         return epic != null ? epic.getSubtasks() : new ArrayList<>();
     }
 
-    public void deleteAllTasks() { // Удаление всех задач
+    public void deleteAllTasks() {
         tasks.clear();
+    }
+
+    public void deleteAllEpics() {
         epics.clear();
+
+    }
+    public void deleteAllSubtasks() {
         subtasks.clear();
     }
 }

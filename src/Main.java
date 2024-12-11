@@ -27,6 +27,7 @@ public class Main {
         subtask1.setStatus(TaskStatus.DONE);
         subtask2.setStatus(TaskStatus.NEW);
         epic1.updateStatus(); // Обновляем статус эпика
+        task2.updateStatus();
 
         // Печать статусов
         System.out.println("Статус задачи 1: " + task1.getStatus());

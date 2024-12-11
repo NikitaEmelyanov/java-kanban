@@ -17,13 +17,23 @@ public class Epic extends Task {
         return subtasks;
     }
 
-    public void updateStatus() { // Изменить статус подзадачи
-        if (subtasks.isEmpty() || subtasks.stream().allMatch(subtask -> subtask.getStatus() == TaskStatus.NEW)) {
+    public void updateStatus() { // Изменить статус эпика
+        if (subtasks.isEmpty()) {
             setStatus(TaskStatus.NEW);
-        } else if (subtasks.stream().allMatch(subtask -> subtask.getStatus() == TaskStatus.DONE)) {
+            return;
+        }    boolean hasInProgress = false;
+        boolean hasDone = false;    for (Subtask subtask : subtasks) {
+            if (subtask.getStatus() == TaskStatus.IN_PROGRESS) {
+                hasInProgress = true;
+            } else if (subtask.getStatus() == TaskStatus.DONE) {
+                hasDone = true;
+            }
+        }    if (hasInProgress) {
+            setStatus(TaskStatus.IN_PROGRESS);
+        } else if (hasDone) {
             setStatus(TaskStatus.DONE);
         } else {
-            setStatus(TaskStatus.IN_PROGRESS);
+            setStatus(TaskStatus.NEW);
         }
     }
 }
