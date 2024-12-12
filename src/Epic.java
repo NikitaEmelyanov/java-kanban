@@ -21,14 +21,21 @@ public class Epic extends Task {
         if (subtasks.isEmpty()) {
             setStatus(TaskStatus.NEW);
             return;
-        }    boolean hasInProgress = false;
-        boolean hasDone = false;    for (Subtask subtask : subtasks) {
+        }
+
+        boolean hasInProgress = false;
+        boolean hasDone = false;
+
+        for (Subtask subtask : subtasks) {
             if (subtask.getStatus() == TaskStatus.IN_PROGRESS) {
                 hasInProgress = true;
+                break; // Выходим из цикла, если нашли первую подзадачу в статусе IN_PROGRESS
             } else if (subtask.getStatus() == TaskStatus.DONE) {
                 hasDone = true;
             }
-        }    if (hasInProgress) {
+        }
+
+        if (hasInProgress) { // Обновляем статус эпика на основе найденных подзадач
             setStatus(TaskStatus.IN_PROGRESS);
         } else if (hasDone) {
             setStatus(TaskStatus.DONE);

@@ -65,18 +65,13 @@ public class TaskManager {
 
     public void updateTask(Task task) { // Изменение статуса Задачи
         tasks.put(task.getId(), task);
-        // Если задача обновляется, также нужно обновить статус эпика, если это подзадача
-        if (task instanceof Subtask) {
-            Epic epic = ((Subtask) task).getEpic();
-            epic.updateStatus(); // Обновляем статус эпика
-
-        }
     }
 
     public void updateEpic(Epic epic) { // Изменение статуса Эпика
         epics.put(epic.getId(), epic);
         epic.updateStatus(); // Обновляем статус эпика
     }
+
     public void updateSubtask(Subtask subtask) { // Изменение статуса подзадачи
         tasks.put(subtask.getId(), subtask);
 
@@ -108,9 +103,13 @@ public class TaskManager {
 
     public void deleteAllEpics() {
         epics.clear();
-
+        subtasks.clear();
     }
+
     public void deleteAllSubtasks() {
         subtasks.clear();
+        for (Epic epic : getAllEpics()) {
+            epic.updateStatus();
+        }
     }
 }
