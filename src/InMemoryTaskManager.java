@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks = new HashMap<>();
@@ -135,5 +136,40 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epic : getAllEpics()) {
             epic.updateStatus();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InMemoryTaskManager that = (InMemoryTaskManager) o;
+
+        if (idCounter != that.idCounter) return false;
+        if (!tasks.equals(that.tasks)) return false;
+        if (!epics.equals(that.epics)) return false;
+        if (!subtasks.equals(that.subtasks)) return false;
+        return Objects.equals(historyManager, that.historyManager);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = tasks.hashCode();
+        result = 31 * result + epics.hashCode();
+        result = 31 * result + subtasks.hashCode();
+        result = 31 * result + idCounter;
+        result = 31 * result + (historyManager != null ? historyManager.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "InMemoryTaskManager{" +
+                "tasks=" + tasks +
+                ", epics=" + epics +
+                ", subtasks=" + subtasks +
+                ", idCounter=" + idCounter +
+                ", historyManager=" + historyManager +
+                '}';
     }
 }
