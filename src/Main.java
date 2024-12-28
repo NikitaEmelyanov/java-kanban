@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        TaskManager manager = Managers.getDefault();
 
         // Создаем задачи
         Task task1 = new Task("Первая задача", "Описание первой задачи", manager.getNextId());

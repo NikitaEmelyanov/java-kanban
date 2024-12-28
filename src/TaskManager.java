@@ -1,115 +1,37 @@
-import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 
-public class TaskManager {
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private int idCounter = 1; // Счетчик идентификаторов
+public interface TaskManager {
+    Task createTask(Task task);
 
+    List<Task> getAllTasks();
 
-    public int getNextId() { //Логика счетчика ID
-        return idCounter++;
-    }
+    void updateTask(Task task);
 
-    public void createTask(Task task) { // Создание задачи
-        tasks.put(task.getId(), task);
-    }
+    void deleteAllTasks();
 
-    public void createEpic(Epic epic) { // Создание Эпика
-        epics.put(epic.getId(), epic);
-    }
+    void createSubtask(Subtask subtask2);
 
-    public void createSubtask(Subtask subtask) {
-        subtasks.put(subtask.getId(), subtask);
-        // Добавление подзадачи к соответствующему эпику
-        if (epics.containsKey(subtask.getEpic().getId())) {
-            epics.get(subtask.getEpic().getId()).addSubtask(subtask);
-            subtask.getEpic().updateStatus();
+    void createEpic(Epic epic1);
 
-        }
-    }
+    List<Epic> getAllEpics();
 
-    public Task getTaskById(int id) { // Получить задачи по ID
-        return tasks.get(id);
-    }
+    List<Subtask> getAllSubtasks();
 
-    public Epic getEpicById(int id) { // ПОлучить Эпики по ID
-        return epics.get(id);
-    }
+    void deleteTaskById(int id);
 
-    public Subtask getSubtaskById(int id) { // Получить подзадачи по ID
-        return subtasks.get(id);
-    }
+    void deleteEpicById(int id);
 
-    public List<Task> getAllTasks() { // Получить все задачи
-        return new ArrayList<>(tasks.values());
-    }
+    int getNextId();
 
-    public List<Epic> getAllEpics() { // Получить все эпики
-        return new ArrayList<>(epics.values());
-    }
+    Task getTaskById(Integer id);
 
-    public List<Subtask> getAllSubtasks() { // Получить все подзадачи
-        return new ArrayList<>(subtasks.values());
-    }
+    List<Task> getHistory();
 
-    public void deleteTaskById(int id) { // Удалить задачу по ID
-        tasks.remove(id);
-    }
+    void deleteSubtaskById(int id);
 
-    public void deleteSubtaskById(int id) { // Удалить Подзадачу по ID
-        subtasks.remove(id);
-    }
+    Object getSubtaskById(int id);
 
-    public void updateTask(Task task) { // Изменение статуса Задачи
-        tasks.put(task.getId(), task);
-    }
+    Object getEpicById(int id);
 
-    public void updateEpic(Epic epic) { // Изменение статуса Эпика
-        epics.put(epic.getId(), epic);
-        epic.updateStatus(); // Обновляем статус эпика
-    }
-
-    public void updateSubtask(Subtask subtask) { // Изменение статуса подзадачи
-        tasks.put(subtask.getId(), subtask);
-
-        // Обновление статуса эпика, к которому принадлежит подзадача
-        Epic epic = subtask.getEpic();
-        if (epic != null) {
-            epic.updateStatus(); // Обновление статуса эпика
-        }
-    }
-
-    public void deleteEpicById(int id) { // Удалени Эпика по ID
-        epics.remove(id);
-        // Удаляем все подзадачи, связанные с этим эпиком
-        for (Subtask subtask : getAllSubtasks()) {
-            if (subtask.getEpic().getId() == id) {
-                subtasks.remove(subtask.getId());
-            }
-        }
-    }
-
-    public List<Subtask> getSubtasksByEpicId(int epicId) { // Получение подзадачи по ID
-        Epic epic = epics.get(epicId);
-        return epic != null ? epic.getSubtasks() : new ArrayList<>();
-    }
-
-    public void deleteAllTasks() {
-        tasks.clear();
-    }
-
-    public void deleteAllEpics() {
-        epics.clear();
-        subtasks.clear();
-    }
-
-    public void deleteAllSubtasks() {
-        subtasks.clear();
-        for (Epic epic : getAllEpics()) {
-            epic.updateStatus();
-        }
-    }
+    List<Subtask> getSubtasksByEpicId(int id);
 }

@@ -1,16 +1,28 @@
 import java.util.Objects;
 
 public class Task {
-    private final String name;
-    private final String description;
-    private final int id;
-    private TaskStatus status;
+    public  String name;
+    public  String description;
+    public  int id;
+    public TaskStatus status;
 
     public Task(String name, String description, int id) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.status = TaskStatus.NEW; // Задача создается со статусом NEW
+    }
+
+    public Task(String name, String description, int id, TaskStatus status) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.status = TaskStatus.NEW;
+    }
+
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public String getName() {
