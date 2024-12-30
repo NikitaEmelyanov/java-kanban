@@ -1,3 +1,9 @@
+package managers;
+
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.List;
 
 public interface TaskManager {
@@ -29,9 +35,11 @@ public interface TaskManager {
 
     void deleteSubtaskById(int id);
 
-    Object getSubtaskById(int id);
+    Subtask getSubtaskById(int id);
 
-    Object getEpicById(int id);
+    Epic getEpicById(int id);
 
     List<Subtask> getSubtasksByEpicId(int id);
+
+
 }

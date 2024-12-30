@@ -1,3 +1,5 @@
+package tasks;
+
 public class Subtask extends Task {
     private final Epic epic; // Эпик, к которому принадлежит подзадача
 

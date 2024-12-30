@@ -1,3 +1,9 @@
+package managers;
+
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -11,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
-    public InMemoryTaskManager(InMemoryHistoryManager inMemoryHistoryManager) {
+    public InMemoryTaskManager(HistoryManager inMemoryHistoryManager) {
         this.historyManager = historyManager;
     }
 
@@ -164,7 +170,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public String toString() {
-        return "InMemoryTaskManager{" +
+        return "managers.InMemoryTaskManager{" +
                 "tasks=" + tasks +
                 ", epics=" + epics +
                 ", subtasks=" + subtasks +

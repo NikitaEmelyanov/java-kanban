@@ -1,5 +1,12 @@
+import managers.InMemoryHistoryManager;
+import managers.InMemoryTaskManager;
+import managers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
 
 import java.util.List;
 
@@ -14,9 +21,9 @@ class InMemoryTaskManagerTest {
     @BeforeEach
     void init() {
         taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
-        task = new Task("Test Task", "Description", taskManager.getNextId(), TaskStatus.NEW);
-        epic = new Epic("Test Epic", "Epic Description", taskManager.getNextId());
-        subtask = new Subtask("Test Subtask", "Subtask Description", taskManager.getNextId(), epic);
+        task = new Task("Test tasks.Task", "Description", taskManager.getNextId(), TaskStatus.NEW);
+        epic = new Epic("Test tasks.Epic", "tasks.Epic Description", taskManager.getNextId());
+        subtask = new Subtask("Test tasks.Subtask", "tasks.Subtask Description", taskManager.getNextId(), epic);
     }
 
     @Test
@@ -79,7 +86,7 @@ class InMemoryTaskManagerTest {
     @Test
     void testUpdateTask() {
         taskManager.createTask(task);
-        Task updatedTask = new Task("Updated Task", "Updated Description", task.getId(), TaskStatus.DONE);
+        Task updatedTask = new Task("Updated tasks.Task", "Updated Description", task.getId(), TaskStatus.DONE);
         taskManager.updateTask(updatedTask);
         assertEquals(updatedTask, taskManager.getTaskById(task.getId()));
     }
