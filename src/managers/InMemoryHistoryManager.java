@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
 
     private final HashMap<Integer, Node<Task>> idNode;
     private Node<Task> first;
@@ -49,7 +49,7 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     private void linkLast(Task element) {
         final Node<Task> oldTail = last;
-        final Node<Task> newNode = new Node<>( element, oldTail, null);
+        final Node<Task> newNode = new Node<>(element, oldTail, null);
         last = newNode;
         idNode.put(element.getId(), newNode);
         if (oldTail == null)
