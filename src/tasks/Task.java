@@ -50,9 +50,11 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
     public void updateStatus() { // Изменить статус Задачи
 
     }
+
     @Override
     public String toString() {
         return "Tasks{" +

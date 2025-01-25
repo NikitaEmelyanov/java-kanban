@@ -50,7 +50,8 @@ class InMemoryTaskManagerTest {
     @Test
     void testUpdateTask() {
         taskManager.createTask(task);
-        Task updatedTask = new Task("Updated tasks.Task", "Updated Description", task.getId(), TaskStatus.DONE);
+        Task updatedTask = new Task("Updated tasks.Task", "Updated Description",
+                task.getId(), TaskStatus.DONE);
         taskManager.updateTask(updatedTask);
         assertEquals(updatedTask, taskManager.getTaskById(task.getId()));
     }
