@@ -39,6 +39,10 @@ public class Task {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public TaskStatus getStatus() {
         return status;
     }
@@ -51,11 +55,10 @@ public class Task {
     }
     @Override
     public String toString() {
-        return "tasks.Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
+        return "Tasks{" +
+                "name='" + getName() + '\'' +
+                ", id=" + getId() +
+                ", status=" + getStatus() +
                 '}';
     }
 

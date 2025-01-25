@@ -11,6 +11,7 @@ public class Epic extends Task {
         this.subtasks = new ArrayList<>();
     }
 
+
     public void addSubtask(Subtask subtask) { // Добавить подзадачу
         subtasks.add(subtask);
     }
@@ -44,5 +45,18 @@ public class Epic extends Task {
         } else {
             setStatus(TaskStatus.NEW);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Epics{" +
+                ", name='" + getName() + '\'' +
+                ", id=" + getId() +
+                ", status=" + getStatus() +
+                '}';
+    }
+
+    public void setName(String updatedEpic) {
+        this.name = name;
     }
 }
