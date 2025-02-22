@@ -1,14 +1,14 @@
 package managers;
 
-import tasks.Task;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import tasks.Task;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final HashMap<Integer, Node<Task>> idNode;
+    private final Map<Integer, Node<Task>> idNode;
     private Node<Task> first;
     private Node<Task> last;
 
@@ -18,9 +18,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private static class Node<T> {
 
-        public T data;
-        public Node<T> next;
-        public Node<T> prev;
+        private T data;
+        private Node<T> next;
+        private Node<T> prev;
 
         public Node(T data, Node<T> next, Node<T> prev) {
             this.data = data;
@@ -40,6 +40,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int id) {
         removeNode(idNode.get(id));
+        idNode.remove(idNode.get(id));
     }
 
     @Override
