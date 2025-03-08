@@ -20,6 +20,13 @@ public class Epic extends Task {
         return subtasks;
     }
 
+
+    @Override
+    public String serializeToCsv() {
+        return String.format("%s,%s,%s,%s,%s,%s\n", getId(), TaskType.EPIC, getName(), getStatus(),
+            getDescription(), subtasks);
+    }
+
     public void updateStatus() { // Изменить статус эпика
         if (subtasks.isEmpty()) {
             setStatus(TaskStatus.NEW);
