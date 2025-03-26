@@ -1,12 +1,13 @@
 package managers;
 
+import exception.ManagerSaveException;
 import java.io.File;
 
 public class Managers {
 
     public static TaskManager getDefault() {
         HistoryManager historyManager = getDefaultHistory();
-        return new InMemoryTaskManager(historyManager);
+        return new InMemoryTaskManager();
     }
 
     public static HistoryManager getDefaultHistory() {
@@ -16,7 +17,7 @@ public class Managers {
         return new FileBackedTaskManager(file);
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         fileBackedTaskManager.load();
         return fileBackedTaskManager;

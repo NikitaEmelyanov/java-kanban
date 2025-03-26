@@ -12,7 +12,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
-        super();
         this.file = file;
     }
 
@@ -28,14 +27,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         saveToCsv(lines);
     }
 
-    public void load() {
-        List<String> lines;
-        try {
-            lines = loadFromCsv();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
-
+    public void load() throws ManagerSaveException {
+        List<String> lines = loadFromCsv();
         lines.removeFirst();
 
         for (String line : lines) {
@@ -182,18 +175,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Невозможно сохранить данные в файл.");
         }
 
-        try {
-            FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8, false);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
+        try (BufferedWriter bufferedWriter = new BufferedWriter(
+            new FileWriter(file, StandardCharsets.UTF_8, false))) {
             for (String line : lines) {
                 bufferedWriter.write(line);
             }
-
-            bufferedWriter.close();
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException("Ошибка при записи в файл");
         }
     }
 
@@ -204,9 +192,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         List<String> lines = new ArrayList<>();
 
-        try {
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try (BufferedReader bufferedReader = new BufferedReader(
+            new FileReader(file, StandardCharsets.UTF_8))) {
 
             while (bufferedReader.ready()) {
                 lines.add(bufferedReader.readLine());
@@ -214,7 +201,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             bufferedReader.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException("Ошибка при чтении из файла");
         }
 
         return lines;
@@ -226,20 +213,31 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         switch (taskType) {
             case TASK -> super.createTask(
                 new Task(
+                    Integer.parseInt(lines[0]),
                     lines[2],
                     lines[4],
-                    Integer.parseInt(lines[0]),
                     getTaskStatusFromString(lines[3])
                 ));
             case EPIC -> super.createEpic(
                 new Epic(
+                    Integer.parseInt(lines[0]),
                     lines[2],
                     lines[4],
-                    Integer.parseInt(lines[0])
+                    getTaskStatusFromString(lines[3])
                 ));
 
-
-
+            case SUBTASK -> {
+                int subTaskId = Integer.parseInt(lines[0]);
+                int epicId = Integer.parseInt(lines[lines.length - 1]);
+                super.createSubtask(
+                    new Subtask(
+                        subTaskId,
+                        epicId,
+                        lines[2],
+                        lines[4],
+                        getTaskStatusFromString(lines[3])
+                    ));
+            }
         }
     }
 

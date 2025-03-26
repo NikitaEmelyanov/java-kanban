@@ -12,11 +12,11 @@ import java.util.Map;
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks;
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
     private int idCounter = 1; // Счетчик идентификаторов
 
-////////////////////////////////////////// Методы Task'ов ///////////////////////////////////////////////////
+    ////////////////////////////////////////// Методы Task'ов ///////////////////////////////////////////////////
     @Override
     public void createTask(Task task) { // Создание задачи
         task.setId(idCounter);
@@ -160,10 +160,6 @@ public class InMemoryTaskManager implements TaskManager {
         return epic != null ? epic.getSubtasks() : new ArrayList<>();
     }
 
-    public InMemoryTaskManager(HistoryManager inMemoryHistoryManager) {
-        this.historyManager = historyManager;
-        subtasks = new HashMap<>();
-    }
 
     private void deleteListSubTasks(List<Integer> subTaskIds) {
         for (Integer id : subTaskIds) {
