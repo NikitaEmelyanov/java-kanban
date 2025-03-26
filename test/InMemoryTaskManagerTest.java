@@ -1,4 +1,8 @@
-import managers.InMemoryHistoryManager;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 import managers.InMemoryTaskManager;
 import managers.Managers;
 import managers.TaskManager;
@@ -9,10 +13,6 @@ import tasks.Subtask;
 import tasks.Task;
 import tasks.TaskStatus;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class InMemoryTaskManagerTest {
     private TaskManager taskManager;
     private Task task;
@@ -21,7 +21,7 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     void init() {
-        taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
+        taskManager = new InMemoryTaskManager();
         task = new Task("Test tasks.Task", "Description", taskManager.getNextId(), TaskStatus.NEW);
         epic = new Epic("Test tasks.Epic", "tasks.Epic Description", taskManager.getNextId());
         subtask = new Subtask("Test tasks.Subtask", "tasks.Subtask Description", taskManager.getNextId(), epic);
