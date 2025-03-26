@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    private  List<Subtask> subtasks;
+
+    private List<Subtask> subtasks;
 
     public Epic(String name, String description, int id) {
         super(name, description, id);
@@ -61,10 +62,10 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "Epics{" +
-                ", name='" + getName() + '\'' +
-                ", id=" + getId() +
-                ", status=" + getStatus() +
-                '}';
+               ", name='" + getName() + '\'' +
+               ", id=" + getId() +
+               ", status=" + getStatus() +
+               '}';
     }
 
     public void setName(String updatedEpic) {

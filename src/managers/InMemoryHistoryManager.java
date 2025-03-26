@@ -53,10 +53,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node<Task> newNode = new Node<>(element, oldTail, null);
         last = newNode;
         idNode.put(element.getId(), newNode);
-        if (oldTail == null)
+        if (oldTail == null) {
             first = newNode;
-        else
+        } else {
             oldTail.next = newNode;
+        }
     }
 
     private List<Task> getTasks() {

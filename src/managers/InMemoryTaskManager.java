@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
+
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
@@ -37,7 +38,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task updateTask(Task task) { // Изменение статуса Задачи
-        tasks.put(task.getId(),task);
+        tasks.put(task.getId(), task);
 
         return tasks.get(task.getId());
     }
@@ -144,7 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-//////////////////////////////////////////// Прочие Методы ////////////////////////////////////////////////
+    //////////////////////////////////////////// Прочие Методы ////////////////////////////////////////////////
     @Override
     public List<Task> getHistory() {
         return new ArrayList<>(historyManager.getHistory());

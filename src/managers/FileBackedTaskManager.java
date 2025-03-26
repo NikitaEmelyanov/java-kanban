@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
+
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -133,7 +134,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException("Произошла ошибка сохранения подзадачи: " + subtask.getName());
+            throw new RuntimeException(
+                "Произошла ошибка сохранения подзадачи: " + subtask.getName());
         }
     }
 
@@ -144,7 +146,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             save();
         } catch (ManagerSaveException e) {
-            throw new RuntimeException("Произошла ошибка сохранения подзадачи: " + subtask.getName());
+            throw new RuntimeException(
+                "Произошла ошибка сохранения подзадачи: " + subtask.getName());
         }
     }
 

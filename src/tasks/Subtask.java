@@ -1,6 +1,7 @@
 package tasks;
 
 public class Subtask extends Task {
+
     private Epic epic; // Эпик, к которому принадлежит подзадача
     private int epicId;
 
@@ -16,6 +17,7 @@ public class Subtask extends Task {
         this.epicId = epic.getId();
         this.epic = epic1;
     }
+
     public Subtask(int id, int epicId, String name, String description, TaskStatus taskStatus) {
         super(id, name, description, taskStatus);
         this.epicId = epicId;
@@ -30,10 +32,10 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         return "Subtasks{" +
-                ", name='" + getName() + '\'' +
-                ", id=" + getId() +
-                ", status=" + getStatus() +
-                '}';
+               ", name='" + getName() + '\'' +
+               ", id=" + getId() +
+               ", status=" + getStatus() +
+               '}';
     }
 
     public Epic getEpic() {

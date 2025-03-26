@@ -6,6 +6,7 @@ import tasks.Task;
 import tasks.TaskStatus;
 
 public class Main {
+
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();
 
@@ -16,9 +17,12 @@ public class Main {
         manager.createTask(task2);
 
         // Создаем эпики и подзадачи
-        Epic epic1 = new Epic("Организовать праздник", "Организация семейного праздника", manager.getNextId());
-        Subtask subtask1 = new Subtask("Забронировать место", "Арендовать зал", manager.getNextId(), epic1);
-        Subtask subtask2 = new Subtask("Пригласить гостей", "Отправить приглашения", manager.getNextId(), epic1);
+        Epic epic1 = new Epic("Организовать праздник", "Организация семейного праздника",
+            manager.getNextId());
+        Subtask subtask1 = new Subtask("Забронировать место", "Арендовать зал", manager.getNextId(),
+            epic1);
+        Subtask subtask2 = new Subtask("Пригласить гостей", "Отправить приглашения",
+            manager.getNextId(), epic1);
         manager.createEpic(epic1);
         manager.createSubtask(subtask1);
         manager.createSubtask(subtask2);

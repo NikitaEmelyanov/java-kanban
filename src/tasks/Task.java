@@ -3,9 +3,10 @@ package tasks;
 import java.util.Objects;
 
 public class Task {
-    public  String name;
-    public  String description;
-    public  int id;
+
+    public String name;
+    public String description;
+    public int id;
     public TaskStatus status;
 
     public Task(String name, String description, int id) {
@@ -72,16 +73,20 @@ public class Task {
     @Override
     public String toString() {
         return "Tasks{" +
-                "name='" + getName() + '\'' +
-                ", id=" + getId() +
-                ", status=" + getStatus() +
-                '}';
+               "name='" + getName() + '\'' +
+               ", id=" + getId() +
+               ", status=" + getStatus() +
+               '}';
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         Task task = (Task) obj;
         return id == task.id; // Равенство основано на идентификаторе
     }

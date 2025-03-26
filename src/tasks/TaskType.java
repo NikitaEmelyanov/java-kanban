@@ -1,8 +1,9 @@
 package tasks;
+
 public enum TaskType {
-    TASK ("TASK"),
-    EPIC ("EPIC"),
-    SUBTASK ("SUBTASK");
+    TASK("TASK"),
+    EPIC("EPIC"),
+    SUBTASK("SUBTASK");
 
     private final String taskType;
 
