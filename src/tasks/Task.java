@@ -3,9 +3,10 @@ package tasks;
 import java.util.Objects;
 
 public class Task {
-    public  String name;
-    public  String description;
-    public  int id;
+
+    public String name;
+    public String description;
+    public int id;
     public TaskStatus status;
 
     public Task(String name, String description, int id) {
@@ -22,10 +23,19 @@ public class Task {
         this.status = TaskStatus.NEW;
     }
 
-    public Task(String name, String description) {
+    public Task(int id, String name, String description, TaskStatus status) {
+        this.id = id;
         this.name = name;
         this.description = description;
+        this.status = TaskStatus.NEW;
     }
+
+    public Task(String name, String description, TaskStatus status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+    }
+
 
     public String getName() {
         return name;
@@ -39,6 +49,10 @@ public class Task {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public TaskStatus getStatus() {
         return status;
     }
@@ -46,23 +60,33 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
+
     public void updateStatus() { // Изменить статус Задачи
 
     }
+
+    public String serializeToCsv() {
+        return String.format("%s,%s,%s,%s,%s\n", id, TaskType.TASK, name, status, description);
+    }
+
     @Override
     public String toString() {
-        return "tasks.Task{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                '}';
+        return "Tasks{" +
+               "name='" + getName() + '\'' +
+               ", id=" + getId() +
+               ", status=" + getStatus() +
+               '}';
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         Task task = (Task) obj;
         return id == task.id; // Равенство основано на идентификаторе
     }
