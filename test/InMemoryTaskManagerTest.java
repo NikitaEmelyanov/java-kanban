@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import exception.ManagerSaveException;
 import java.util.List;
 import managers.InMemoryTaskManager;
 import managers.Managers;
@@ -22,49 +23,49 @@ class InMemoryTaskManagerTest {
     @BeforeEach
     void init() {
         taskManager = new InMemoryTaskManager();
-        task = new Task("Test tasks.Task", "Description", taskManager.getNextId(), TaskStatus.NEW);
+        task = new Task(taskManager.getNextId(),"Test tasks.Task", "Description",  TaskStatus.NEW);
         epic = new Epic("Test tasks.Epic", "tasks.Epic Description", taskManager.getNextId());
         subtask = new Subtask("Test tasks.Subtask", "tasks.Subtask Description", taskManager.getNextId(), epic);
     }
 
     @Test
-    void testCreateTask() {
+    void testCreateTask() throws ManagerSaveException {
         taskManager.createTask(task);
         assertEquals(task, taskManager.getTaskById(task.getId()));
 
     }
 
     @Test
-    void testGetTaskById() {
+    void testGetTaskById() throws ManagerSaveException {
         taskManager.createTask(task);
         assertEquals(task, taskManager.getTaskById(task.getId()));
         assertNull(taskManager.getTaskById(11)); // Не существующий ID
     }
 
     @Test
-    void testGetAllTasks() {
+    void testGetAllTasks() throws ManagerSaveException {
         taskManager.createTask(task);
         assertEquals(1, taskManager.getAllTasks().size());
     }
 
     @Test
-    void testUpdateTask() {
+    void testUpdateTask() throws ManagerSaveException {
         taskManager.createTask(task);
-        Task updatedTask = new Task("Updated tasks.Task", "Updated Description",
-                task.getId(), TaskStatus.DONE);
+        Task updatedTask = new Task(task.getId(),"Updated Task", "Updated Description"
+                , TaskStatus.DONE);
         taskManager.updateTask(updatedTask);
         assertEquals(updatedTask, taskManager.getTaskById(task.getId()));
     }
 
     @Test
-    void testDeleteTaskById() {
+    void testDeleteTaskById() throws ManagerSaveException {
         taskManager.createTask(task);
         taskManager.deleteTaskById(task.getId());
         assertNull(taskManager.getTaskById(task.getId()));
     }
 
     @Test
-    void testDeleteAllTasks() {
+    void testDeleteAllTasks() throws ManagerSaveException {
         taskManager.createTask(task);
         taskManager.deleteAllTasks();
         assertEquals(0, taskManager.getAllTasks().size());
@@ -100,7 +101,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testDeleteEpicById() {
+    void testDeleteEpicById() throws ManagerSaveException {
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask);
         taskManager.deleteEpicById(epic.getId());
@@ -109,14 +110,14 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testCreateSubtask() {
+    void testCreateSubtask() throws ManagerSaveException {
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask);
         assertEquals(subtask, taskManager.getSubtaskById(subtask.getId()));
     }
 
     @Test
-    void testGetSubtasksByEpicId() {
+    void testGetSubtasksByEpicId() throws ManagerSaveException {
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask);
         List<Subtask> subtasks = taskManager.getSubtasksByEpicId(epic.getId());
@@ -125,7 +126,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testDeleteSubtaskById() {
+    void testDeleteSubtaskById() throws ManagerSaveException {
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask);
         taskManager.deleteSubtaskById(subtask.getId());
@@ -133,7 +134,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testGetHistory() {
+    void testGetHistory() throws ManagerSaveException {
         taskManager.createTask(task);
         taskManager.getTaskById(task.getId());
         List<Task> history = taskManager.getHistory();

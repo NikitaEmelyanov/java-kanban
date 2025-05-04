@@ -1,3 +1,4 @@
+import exception.ManagerSaveException;
 import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
@@ -7,7 +8,7 @@ import tasks.TaskStatus;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ManagerSaveException {
         TaskManager manager = Managers.getDefault();
 
         // Создаем задачи

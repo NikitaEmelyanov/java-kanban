@@ -1,5 +1,6 @@
 package managers;
 
+import exception.ManagerSaveException;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -8,13 +9,13 @@ import java.util.List;
 
 public interface TaskManager {
 
-    void createTask(Task task);
+    void createTask(Task task) throws ManagerSaveException;
 
     Task getTaskById(int id);
 
     List<Task> getAllTasks();
 
-    Task updateTask(Task task);
+    Task updateTask(Task task) throws ManagerSaveException;
 
     void deleteTaskById(int id);
 
@@ -32,7 +33,7 @@ public interface TaskManager {
 
     void deleteAllEpics();
 
-    void createSubtask(Subtask subtask2);
+    void createSubtask(Subtask subtask2) throws ManagerSaveException;
 
     Subtask getSubtaskById(int id);
 
@@ -40,7 +41,7 @@ public interface TaskManager {
 
     List<Subtask> getAllSubtasks();
 
-    void updateSubtask(Subtask subtask);
+    void updateSubtask(Subtask subtask) throws ManagerSaveException;
 
     void deleteSubtaskById(int id);
 
@@ -50,5 +51,5 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-
+    List<Task> getPrioritizedTasks();
 }
