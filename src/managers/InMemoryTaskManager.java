@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
+
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
@@ -24,7 +25,9 @@ public class InMemoryTaskManager implements TaskManager {
     // Методы для Task
     @Override
     public void createTask(Task task) throws TimeOverlapException, ManagerSaveException {
-        if (task == null) return;
+        if (task == null) {
+            return;
+        }
         if (hasTimeOverlapWithAny(task)) {
             throw new TimeOverlapException("Задача пересекается по времени с существующей");
         }
@@ -49,7 +52,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task updateTask(Task task) throws TimeOverlapException, ManagerSaveException {
-        if (task == null || !tasks.containsKey(task.getId())) return null;
+        if (task == null || !tasks.containsKey(task.getId())) {
+            return null;
+        }
 
         Task existingTask = tasks.get(task.getId());
         if (!isTimeAvailableForUpdate(existingTask, task)) {
@@ -82,7 +87,9 @@ public class InMemoryTaskManager implements TaskManager {
     // Методы для Epic
     @Override
     public void createEpic(Epic epic) {
-        if (epic == null) return;
+        if (epic == null) {
+            return;
+        }
         epic.setId(idCounter++);
         epics.put(epic.getId(), epic);
     }
@@ -103,7 +110,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateEpic(Epic epic) {
-        if (epic == null || !epics.containsKey(epic.getId())) return;
+        if (epic == null || !epics.containsKey(epic.getId())) {
+            return;
+        }
         epics.put(epic.getId(), epic);
         epic.updateStatus();
     }
@@ -136,8 +145,12 @@ public class InMemoryTaskManager implements TaskManager {
     // Методы для Subtask
     @Override
     public void createSubtask(Subtask subtask) throws ManagerSaveException, TimeOverlapException {
-        if (subtask == null) return;
-        if (!epics.containsKey(subtask.getEpicId())) return;
+        if (subtask == null) {
+            return;
+        }
+        if (!epics.containsKey(subtask.getEpicId())) {
+            return;
+        }
         if (hasTimeOverlapWithAny(subtask)) {
             throw new TimeOverlapException("Подзадача пересекается по времени с существующей");
         }
@@ -159,7 +172,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getSubtasksByEpicId(int id) {
-        if (!epics.containsKey(id)) return new ArrayList<>();
+        if (!epics.containsKey(id)) {
+            return new ArrayList<>();
+        }
         return epics.get(id).getSubtasks();
     }
 
@@ -170,11 +185,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(Subtask subtask) throws ManagerSaveException, TimeOverlapException {
-        if (subtask == null || !subtasks.containsKey(subtask.getId())) return;
+        if (subtask == null || !subtasks.containsKey(subtask.getId())) {
+            return;
+        }
 
         Subtask existingSubtask = subtasks.get(subtask.getId());
         if (!isTimeAvailableForUpdate(existingSubtask, subtask)) {
-            throw new TimeOverlapException("Обновленная подзадача пересекается по времени с другими");
+            throw new TimeOverlapException(
+                "Обновленная подзадача пересекается по времени с другими");
         }
 
         subtasks.put(subtask.getId(), subtask);
@@ -226,8 +244,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Новые методы для работы с временем
     private boolean hasTimeOverlap(Task task1, Task task2) {
-        if (task1 == task2) return false;
-        if (task1.getStartTime() == null || task2.getStartTime() == null) return false;
+        if (task1 == task2) {
+            return false;
+        }
+        if (task1.getStartTime() == null || task2.getStartTime() == null) {
+            return false;
+        }
 
         LocalDateTime start1 = task1.getStartTime();
         LocalDateTime end1 = task1.getEndTime();
@@ -244,7 +266,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean isTimeAvailableForUpdate(Task existingTask, Task updatedTask) {
-        if (updatedTask.getStartTime() == null) return true;
+        if (updatedTask.getStartTime() == null) {
+            return true;
+        }
 
         Set<Task> otherTasks = new HashSet<>(prioritizedTasks);
         otherTasks.remove(existingTask);
@@ -268,6 +292,7 @@ public class InMemoryTaskManager implements TaskManager {
         removeFromPrioritized(oldTask);
         addToPrioritized(newTask);
     }
+
     @Override
     public List<Task> getPrioritizedTasks() {
         List<Task> prioritizedList = new ArrayList<>();

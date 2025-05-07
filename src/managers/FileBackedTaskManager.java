@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
+
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -39,7 +40,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void load() throws ManagerSaveException, TimeOverlapException {
         List<String> lines = loadFromCsv();
-        if (lines.isEmpty()) return;
+        if (lines.isEmpty()) {
+            return;
+        }
 
         lines.remove(0); // Remove header
 
@@ -68,7 +71,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private Task deSerialize(String line) {
         String[] fields = line.split(",");
-        if (fields.length < 5) return null;
+        if (fields.length < 5) {
+            return null;
+        }
 
         int id = Integer.parseInt(fields[0]);
         TaskType type = TaskType.valueOf(fields[1]);
@@ -89,7 +94,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             case EPIC:
                 return new Epic(id, name, description, status, startTime, duration, null);
             case SUBTASK:
-                if (fields.length < 8) return null;
+                if (fields.length < 8) {
+                    return null;
+                }
                 int epicId = Integer.parseInt(fields[7]);
                 return new Subtask(id, epicId, name, description, status, startTime, duration);
             default:

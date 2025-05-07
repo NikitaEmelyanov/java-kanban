@@ -15,6 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskManagerTest<T extends TaskManager> {
+
     protected T taskManager;
     protected Task task;
     protected Epic epic;
@@ -84,14 +85,16 @@ class TaskManagerTest<T extends TaskManager> {
         Epic savedEpic = taskManager.getEpicById(epic.getId());
 
         assertEquals(startTime, savedEpic.getStartTime()); // Должен быть минимальный startTime
-        assertEquals(startTime.plusHours(2).plusHours(2), savedEpic.getEndTime()); // startTime + duration
-        assertEquals(duration.plus(duration.plusHours(1)), savedEpic.getDuration()); // Сумма длительностей
+        assertEquals(startTime.plusHours(2).plusHours(2),
+            savedEpic.getEndTime()); // startTime + duration
+        assertEquals(duration.plus(duration.plusHours(1)),
+            savedEpic.getDuration()); // Сумма длительностей
     }
 
     @Test
     void testUpdateTaskTime() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
-        Task updatedTask = new Task(task.getId(),task.getName(), task.getDescription(),
+        Task updatedTask = new Task(task.getId(), task.getName(), task.getDescription(),
             task.getStatus(), task.getStartTime().plusHours(3), task.getDuration());
 
         taskManager.updateTask(updatedTask);

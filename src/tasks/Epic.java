@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
+
     private List<Subtask> subtasks;
     private LocalDateTime endTime;
 
@@ -85,8 +86,10 @@ public class Epic extends Task {
             return;
         }
 
-        boolean allNew = subtasks.stream().allMatch(subtask -> subtask.getStatus() == TaskStatus.NEW);
-        boolean allDone = subtasks.stream().allMatch(subtask -> subtask.getStatus() == TaskStatus.DONE);
+        boolean allNew = subtasks.stream()
+            .allMatch(subtask -> subtask.getStatus() == TaskStatus.NEW);
+        boolean allDone = subtasks.stream()
+            .allMatch(subtask -> subtask.getStatus() == TaskStatus.DONE);
 
         if (allNew) {
             setStatus(TaskStatus.NEW);
@@ -102,7 +105,8 @@ public class Epic extends Task {
         return String.format("%s,%s,%s,%s,%s,%s,%s\n",
             getId(), TaskType.EPIC, getName(), getStatus(),
             getDescription(),
-            getStartTime() != null ? getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "",
+            getStartTime() != null ? getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                : "",
             getDuration() != null ? getDuration().toMinutes() : "");
     }
 
@@ -115,7 +119,8 @@ public class Epic extends Task {
                ", startTime=" + (getStartTime() != null ?
             getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "null") +
                ", duration=" + (getDuration() != null ? getDuration().toMinutes() + "m" : "null") +
-               ", endTime=" + (endTime != null ? endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "null") +
+               ", endTime=" + (endTime != null ? endTime.format(
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "null") +
                ", subtasksCount=" + subtasks.size() +
                '}';
     }

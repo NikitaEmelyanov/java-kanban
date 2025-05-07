@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Subtask extends Task {
+
     private Epic epic;
     private int epicId;
 
@@ -48,7 +49,8 @@ public class Subtask extends Task {
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s\n",
             getId(), TaskType.SUBTASK, getName(), getStatus(),
             getDescription(),
-            getStartTime() != null ? getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "",
+            getStartTime() != null ? getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                : "",
             getDuration() != null ? getDuration().toMinutes() : "",
             epicId);
     }

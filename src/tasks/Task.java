@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
+
     protected String name;
     protected String description;
     protected int id;
@@ -20,7 +21,8 @@ public class Task {
         this.status = TaskStatus.NEW;
     }
 
-    public Task(String name, String description, int id, LocalDateTime startTime, Duration duration) {
+    public Task(String name, String description, int id, LocalDateTime startTime,
+        Duration duration) {
         this(name, description, id);
         this.startTime = startTime;
         this.duration = duration;
@@ -40,7 +42,8 @@ public class Task {
         this.duration = duration;
     }
 
-    public Task(String name, String description, TaskStatus status,Duration duration,LocalDateTime startTime) {
+    public Task(String name, String description, TaskStatus status, Duration duration,
+        LocalDateTime startTime) {
 
     }
 
@@ -95,7 +98,8 @@ public class Task {
         return TaskType.TASK;
     }
 
-    public void updateStatus() {}
+    public void updateStatus() {
+    }
 
     public String serializeToCsv() {
         return String.format("%s,%s,%s,%s,%s,%s,%s\n",
@@ -110,15 +114,20 @@ public class Task {
                "name='" + name + '\'' +
                ", id=" + id +
                ", status=" + status +
-               ", startTime=" + (startTime != null ? startTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "null") +
+               ", startTime=" + (startTime != null ? startTime.format(
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "null") +
                ", duration=" + (duration != null ? duration.toMinutes() + "m" : "null") +
                '}';
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         Task task = (Task) obj;
         return id == task.id &&
                Objects.equals(name, task.name) &&

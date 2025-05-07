@@ -16,6 +16,7 @@ import tasks.Task;
 import tasks.TaskStatus;
 
 class InMemoryTaskManagerTest {
+
     private TaskManager taskManager;
     private Task task;
     private Epic epic;
@@ -24,9 +25,10 @@ class InMemoryTaskManagerTest {
     @BeforeEach
     void init() {
         taskManager = new InMemoryTaskManager();
-        task = new Task(taskManager.getNextId(),"Test tasks.Task", "Description",  TaskStatus.NEW);
+        task = new Task(taskManager.getNextId(), "Test tasks.Task", "Description", TaskStatus.NEW);
         epic = new Epic("Test tasks.Epic", "tasks.Epic Description", taskManager.getNextId());
-        subtask = new Subtask("Test tasks.Subtask", "tasks.Subtask Description", taskManager.getNextId(), epic);
+        subtask = new Subtask("Test tasks.Subtask", "tasks.Subtask Description",
+            taskManager.getNextId(), epic);
     }
 
     @Test
@@ -52,8 +54,8 @@ class InMemoryTaskManagerTest {
     @Test
     void testUpdateTask() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
-        Task updatedTask = new Task(task.getId(),"Updated Task", "Updated Description"
-                , TaskStatus.DONE);
+        Task updatedTask = new Task(task.getId(), "Updated Task", "Updated Description"
+            , TaskStatus.DONE);
         taskManager.updateTask(updatedTask);
         assertEquals(updatedTask, taskManager.getTaskById(task.getId()));
     }
