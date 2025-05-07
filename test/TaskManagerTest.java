@@ -1,6 +1,7 @@
 package tests;
 
 import exception.ManagerSaveException;
+import exception.TimeOverlapException;
 import managers.Managers;
 import managers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +31,7 @@ class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void testCreateTaskWithTime() throws ManagerSaveException {
+    void testCreateTaskWithTime() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         Task savedTask = taskManager.getTaskById(task.getId());
 
@@ -40,16 +41,17 @@ class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void testTaskTimeOverlap() throws ManagerSaveException {
+    void testTaskTimeOverlap() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         Task overlappingTask = new Task("Overlapping", "Desc", 4,
             task.getStartTime().plusMinutes(15), Duration.ofMinutes(20));
 
-        assertThrows(ManagerSaveException.class, () -> taskManager.createTask(overlappingTask));
+        // Ожидаем TimeOverlapException вместо ManagerSaveException
+        assertThrows(TimeOverlapException.class, () -> taskManager.createTask(overlappingTask));
     }
 
     @Test
-    void testPrioritizedTasksOrder() throws ManagerSaveException {
+    void testPrioritizedTasksOrder() throws ManagerSaveException, TimeOverlapException {
         Task earlyTask = new Task("Early", "Desc", 5,
             LocalDateTime.now().plusHours(2), Duration.ofMinutes(30));
         Task lateTask = new Task("Late", "Desc", 6,
@@ -64,25 +66,30 @@ class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void testEpicTimeCalculation() throws ManagerSaveException {
-        taskManager.createEpic(epic);
-        taskManager.createSubtask(subtask);
+    void testEpicTimeCalculation() throws ManagerSaveException, TimeOverlapException {
+        // Фиксируем конкретное время для теста
+        LocalDateTime startTime = LocalDateTime.of(2023, 1, 1, 10, 0);
+        Duration duration = Duration.ofHours(1);
 
-        Subtask subtask2 = new Subtask("Sub 2", "Desc", 4,
-            subtask.getStartTime().plusHours(2), Duration.ofHours(1), epic.getId());
+        taskManager.createEpic(epic);
+
+        Subtask subtask1 = new Subtask("Sub 1", "Desc", taskManager.getNextId(),
+            startTime, duration, epic.getId());
+        taskManager.createSubtask(subtask1);
+
+        Subtask subtask2 = new Subtask("Sub 2", "Desc", taskManager.getNextId(),
+            startTime.plusHours(2), duration.plusHours(1), epic.getId());
         taskManager.createSubtask(subtask2);
 
         Epic savedEpic = taskManager.getEpicById(epic.getId());
-        assertEquals(subtask.getStartTime(), savedEpic.getStartTime());
-        assertEquals(subtask2.getEndTime(), savedEpic.getEndTime());
-        assertEquals(
-            subtask.getDuration().plus(subtask2.getDuration()),
-            savedEpic.getDuration()
-        );
+
+        assertEquals(startTime, savedEpic.getStartTime()); // Должен быть минимальный startTime
+        assertEquals(startTime.plusHours(2).plusHours(2), savedEpic.getEndTime()); // startTime + duration
+        assertEquals(duration.plus(duration.plusHours(1)), savedEpic.getDuration()); // Сумма длительностей
     }
 
     @Test
-    void testUpdateTaskTime() throws ManagerSaveException {
+    void testUpdateTaskTime() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         Task updatedTask = new Task(task.getId(),task.getName(), task.getDescription(),
             task.getStatus(), task.getStartTime().plusHours(3), task.getDuration());

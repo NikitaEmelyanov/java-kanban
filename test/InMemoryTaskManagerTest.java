@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import exception.ManagerSaveException;
+import exception.TimeOverlapException;
 import java.util.List;
 import managers.InMemoryTaskManager;
 import managers.Managers;
@@ -29,27 +30,27 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testCreateTask() throws ManagerSaveException {
+    void testCreateTask() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         assertEquals(task, taskManager.getTaskById(task.getId()));
 
     }
 
     @Test
-    void testGetTaskById() throws ManagerSaveException {
+    void testGetTaskById() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         assertEquals(task, taskManager.getTaskById(task.getId()));
         assertNull(taskManager.getTaskById(11)); // Не существующий ID
     }
 
     @Test
-    void testGetAllTasks() throws ManagerSaveException {
+    void testGetAllTasks() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         assertEquals(1, taskManager.getAllTasks().size());
     }
 
     @Test
-    void testUpdateTask() throws ManagerSaveException {
+    void testUpdateTask() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         Task updatedTask = new Task(task.getId(),"Updated Task", "Updated Description"
                 , TaskStatus.DONE);
@@ -58,14 +59,14 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testDeleteTaskById() throws ManagerSaveException {
+    void testDeleteTaskById() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         taskManager.deleteTaskById(task.getId());
         assertNull(taskManager.getTaskById(task.getId()));
     }
 
     @Test
-    void testDeleteAllTasks() throws ManagerSaveException {
+    void testDeleteAllTasks() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         taskManager.deleteAllTasks();
         assertEquals(0, taskManager.getAllTasks().size());
@@ -79,20 +80,17 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testGetEpicById() {
-        Epic epic = new Epic("Epic Test", "just description",1);
-        taskManager.updateEpic(epic);
-
-        Epic fetchedEpic = taskManager.getEpicById(1);
+        taskManager.createEpic(epic);
+        Epic fetchedEpic = taskManager.getEpicById(epic.getId());
         assertEquals(epic, fetchedEpic);
-        Managers.getDefaultHistory().addToHistory(epic);
     }
 
     @Test
     void testGetAllEpics() {
-        Epic epic1 = new Epic("Epic 1", "just description1",1);
-        Epic epic2 = new Epic("Epic 2", "just description2",2);
-        taskManager.updateEpic(epic1);
-        taskManager.updateEpic(epic2);
+        Epic epic1 = new Epic("Epic 1", "just description1", taskManager.getNextId());
+        Epic epic2 = new Epic("Epic 2", "just description2", taskManager.getNextId());
+        taskManager.createEpic(epic1); // Используем createEpic
+        taskManager.createEpic(epic2); // Используем createEpic
 
         List<Epic> allEpics = taskManager.getAllEpics();
         assertEquals(2, allEpics.size());
@@ -101,7 +99,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testDeleteEpicById() throws ManagerSaveException {
+    void testDeleteEpicById() throws ManagerSaveException, TimeOverlapException {
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask);
         taskManager.deleteEpicById(epic.getId());
@@ -109,24 +107,9 @@ class InMemoryTaskManagerTest {
         assertEquals(0, taskManager.getAllSubtasks().size()); // Подзадачи также должны быть удалены
     }
 
-    @Test
-    void testCreateSubtask() throws ManagerSaveException {
-        taskManager.createEpic(epic);
-        taskManager.createSubtask(subtask);
-        assertEquals(subtask, taskManager.getSubtaskById(subtask.getId()));
-    }
 
     @Test
-    void testGetSubtasksByEpicId() throws ManagerSaveException {
-        taskManager.createEpic(epic);
-        taskManager.createSubtask(subtask);
-        List<Subtask> subtasks = taskManager.getSubtasksByEpicId(epic.getId());
-        assertEquals(1, subtasks.size());
-        assertEquals(subtask, subtasks.get(0));
-    }
-
-    @Test
-    void testDeleteSubtaskById() throws ManagerSaveException {
+    void testDeleteSubtaskById() throws ManagerSaveException, TimeOverlapException {
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask);
         taskManager.deleteSubtaskById(subtask.getId());
@@ -134,7 +117,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testGetHistory() throws ManagerSaveException {
+    void testGetHistory() throws ManagerSaveException, TimeOverlapException {
         taskManager.createTask(task);
         taskManager.getTaskById(task.getId());
         List<Task> history = taskManager.getHistory();

@@ -1,6 +1,7 @@
 package managers;
 
 import exception.ManagerSaveException;
+import exception.TimeOverlapException;
 import tasks.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,10 +23,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Методы для Task
     @Override
-    public void createTask(Task task) throws ManagerSaveException {
+    public void createTask(Task task) throws TimeOverlapException, ManagerSaveException {
         if (task == null) return;
         if (hasTimeOverlapWithAny(task)) {
-            throw new ManagerSaveException("Задача пересекается по времени с существующей");
+            throw new TimeOverlapException("Задача пересекается по времени с существующей");
         }
         task.setId(idCounter++);
         tasks.put(task.getId(), task);
@@ -47,12 +48,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task updateTask(Task task) throws ManagerSaveException {
+    public Task updateTask(Task task) throws TimeOverlapException, ManagerSaveException {
         if (task == null || !tasks.containsKey(task.getId())) return null;
 
         Task existingTask = tasks.get(task.getId());
         if (!isTimeAvailableForUpdate(existingTask, task)) {
-            throw new ManagerSaveException("Обновленная задача пересекается по времени с другими");
+            throw new TimeOverlapException("Обновленная задача пересекается по времени с другими");
         }
 
         tasks.put(task.getId(), task);
@@ -134,11 +135,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Методы для Subtask
     @Override
-    public void createSubtask(Subtask subtask) throws ManagerSaveException {
+    public void createSubtask(Subtask subtask) throws ManagerSaveException, TimeOverlapException {
         if (subtask == null) return;
         if (!epics.containsKey(subtask.getEpicId())) return;
         if (hasTimeOverlapWithAny(subtask)) {
-            throw new ManagerSaveException("Подзадача пересекается по времени с существующей");
+            throw new TimeOverlapException("Подзадача пересекается по времени с существующей");
         }
 
         subtask.setId(idCounter++);
@@ -168,12 +169,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) throws ManagerSaveException {
+    public void updateSubtask(Subtask subtask) throws ManagerSaveException, TimeOverlapException {
         if (subtask == null || !subtasks.containsKey(subtask.getId())) return;
 
         Subtask existingSubtask = subtasks.get(subtask.getId());
         if (!isTimeAvailableForUpdate(existingSubtask, subtask)) {
-            throw new ManagerSaveException("Обновленная подзадача пересекается по времени с другими");
+            throw new TimeOverlapException("Обновленная подзадача пересекается по времени с другими");
         }
 
         subtasks.put(subtask.getId(), subtask);

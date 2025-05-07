@@ -1,6 +1,7 @@
 package managers;
 
 import exception.ManagerSaveException;
+import exception.TimeOverlapException;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -9,13 +10,13 @@ import java.util.List;
 
 public interface TaskManager {
 
-    void createTask(Task task) throws ManagerSaveException;
+    void createTask(Task task) throws ManagerSaveException, TimeOverlapException;
 
     Task getTaskById(int id);
 
     List<Task> getAllTasks();
 
-    Task updateTask(Task task) throws ManagerSaveException;
+    Task updateTask(Task task) throws ManagerSaveException, TimeOverlapException;
 
     void deleteTaskById(int id);
 
@@ -33,7 +34,7 @@ public interface TaskManager {
 
     void deleteAllEpics();
 
-    void createSubtask(Subtask subtask2) throws ManagerSaveException;
+    void createSubtask(Subtask subtask2) throws ManagerSaveException, TimeOverlapException;
 
     Subtask getSubtaskById(int id);
 
@@ -41,7 +42,7 @@ public interface TaskManager {
 
     List<Subtask> getAllSubtasks();
 
-    void updateSubtask(Subtask subtask) throws ManagerSaveException;
+    void updateSubtask(Subtask subtask) throws ManagerSaveException, TimeOverlapException;
 
     void deleteSubtaskById(int id);
 

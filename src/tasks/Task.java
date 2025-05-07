@@ -40,8 +40,8 @@ public class Task {
         this.duration = duration;
     }
 
-    public Task() {
-        // Пустой конструктор для случаев, когда нужен объект без инициализации
+    public Task(String name, String description, TaskStatus status,Duration duration,LocalDateTime startTime) {
+
     }
 
     public String getName() {

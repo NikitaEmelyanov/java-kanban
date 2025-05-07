@@ -1,6 +1,7 @@
 package managers;
 
 import exception.ManagerSaveException;
+import exception.TimeOverlapException;
 import tasks.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +18,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
+    public static FileBackedTaskManager loadFromFile(File file)
+        throws ManagerSaveException, TimeOverlapException {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         manager.load();
         return manager;
@@ -35,7 +37,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         saveToCsv(lines);
     }
 
-    public void load() throws ManagerSaveException {
+    public void load() throws ManagerSaveException, TimeOverlapException {
         List<String> lines = loadFromCsv();
         if (lines.isEmpty()) return;
 
@@ -130,13 +132,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createTask(Task task) throws ManagerSaveException {
+    public void createTask(Task task) throws TimeOverlapException, ManagerSaveException {
         super.createTask(task);
         save();
     }
 
     @Override
-    public Task updateTask(Task task) throws ManagerSaveException {
+    public Task updateTask(Task task) throws TimeOverlapException, ManagerSaveException {
         Task updatedTask = super.updateTask(task);
         save();
         return updatedTask;
@@ -203,13 +205,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createSubtask(Subtask subtask) throws ManagerSaveException {
+    public void createSubtask(Subtask subtask) throws ManagerSaveException, TimeOverlapException {
         super.createSubtask(subtask);
         save();
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) throws ManagerSaveException {
+    public void updateSubtask(Subtask subtask) throws ManagerSaveException, TimeOverlapException {
         super.updateSubtask(subtask);
         save();
     }

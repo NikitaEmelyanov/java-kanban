@@ -1,4 +1,5 @@
 import exception.ManagerSaveException;
+import exception.TimeOverlapException;
 import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
@@ -8,7 +9,7 @@ import tasks.TaskStatus;
 
 public class Main {
 
-    public static void main(String[] args) throws ManagerSaveException {
+    public static void main(String[] args) throws ManagerSaveException, TimeOverlapException {
         TaskManager manager = Managers.getDefault();
 
         // Создаем задачи
