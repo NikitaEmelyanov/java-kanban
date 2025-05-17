@@ -3,10 +3,10 @@ package http;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import managers.TaskManager;
-import tasks.Task;
 import java.io.IOException;
 import java.util.List;
+import managers.TaskManager;
+import tasks.Task;
 
 public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
 

@@ -2,11 +2,10 @@ package managers;
 
 import exception.ManagerSaveException;
 import exception.TimeOverlapException;
+import java.util.List;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-
-import java.util.List;
 
 public interface TaskManager {
 
