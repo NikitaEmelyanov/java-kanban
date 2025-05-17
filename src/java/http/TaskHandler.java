@@ -3,9 +3,12 @@ package http;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import exception.TimeOverlapException;
 import managers.TaskManager;
 import tasks.Task;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
@@ -36,6 +39,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                     sendNotFound(exchange);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             sendInternalError(exchange);
         }
     }
@@ -65,13 +69,14 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
         try {
             if (task.getId() == 0) {
-                taskManager.createTask(task);
-                sendCreated(exchange);
+                Task createdTask = taskManager.createTask(task);
+                String response = gson.toJson(createdTask);
+                sendText(exchange, response, 201);
             } else {
                 taskManager.updateTask(task);
-                sendCreated(exchange);
+                sendText(exchange, "Task updated", 201);
             }
-        } catch (Exception e) {
+        } catch (TimeOverlapException e) {
             sendHasInteractions(exchange);
         }
     }
@@ -82,12 +87,25 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         if (path.matches("/tasks/\\d+")) {
             int id = Integer.parseInt(path.split("/")[2]);
             taskManager.deleteTaskById(id);
-            sendCreated(exchange);
+            sendText(exchange, "Task deleted", 200);
         } else if (path.equals("/tasks")) {
             taskManager.deleteAllTasks();
-            sendCreated(exchange);
+            sendText(exchange, "All tasks deleted", 200);
         } else {
             sendNotFound(exchange);
         }
+    }
+
+    protected void sendText(HttpExchange exchange, String text, int statusCode) throws IOException {
+        byte[] response = text.getBytes(StandardCharsets.UTF_8);
+        exchange.getResponseHeaders().add("Content-Type", "application/json");
+        exchange.sendResponseHeaders(statusCode, response.length);
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(response);
+        }
+    }
+
+    protected void sendText(HttpExchange exchange, String text) throws IOException {
+        sendText(exchange, text, 200);
     }
 }

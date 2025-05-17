@@ -36,22 +36,25 @@ class HttpTaskServerTest {
 
     @Test
     void testCreateAndGetTask() throws IOException, InterruptedException {
-        Task task = new Task("Test", "Description", 1);
+        Task task = new Task("Test", "Description");
         String taskJson = gson.toJson(task);
 
-        HttpRequest request = HttpRequest.newBuilder()
+        // POST запрос
+        HttpRequest postRequest = HttpRequest.newBuilder()
             .uri(URI.create("http://localhost:8080/tasks"))
             .POST(HttpRequest.BodyPublishers.ofString(taskJson))
             .build();
+        HttpResponse<String> postResponse = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        assertEquals(201, postResponse.statusCode());
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(201, response.statusCode());
+        Task createdTask = gson.fromJson(postResponse.body(), Task.class);
+        int taskId = createdTask.getId();
 
+        // GET запрос
         HttpRequest getRequest = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:8080/tasks/1"))
+            .uri(URI.create("http://localhost:8080/tasks/" + taskId))
             .GET()
             .build();
-
         HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getResponse.statusCode());
 

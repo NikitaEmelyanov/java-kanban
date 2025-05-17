@@ -139,9 +139,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createTask(Task task) throws TimeOverlapException, ManagerSaveException {
+    public Task createTask(Task task) throws TimeOverlapException, ManagerSaveException {
         super.createTask(task);
         save();
+        return task;
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface TaskManager {
 
-    void createTask(Task task) throws ManagerSaveException, TimeOverlapException;
+    Task createTask(Task task) throws ManagerSaveException, TimeOverlapException;
 
     Task getTaskById(int id);
 

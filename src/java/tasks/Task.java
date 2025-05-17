@@ -47,6 +47,9 @@ public class Task {
 
     }
 
+    public Task(String test, String description) {
+    }
+
     public String getName() {
         return name;
     }

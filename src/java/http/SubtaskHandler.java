@@ -6,16 +6,14 @@ import com.sun.net.httpserver.HttpHandler;
 import exception.ManagerSaveException;
 import exception.TimeOverlapException;
 import managers.TaskManager;
-import tasks.Epic;
 import tasks.Subtask;
 import java.io.IOException;
-import java.util.List;
 
-public class EpicHandler extends BaseHttpHandler implements HttpHandler {
+public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
     private final Gson gson;
 
-    public EpicHandler(TaskManager taskManager, Gson gson) {
+    public SubtaskHandler(TaskManager taskManager, Gson gson) {
         this.taskManager = taskManager;
         this.gson = gson;
     }
@@ -45,21 +43,17 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handleGet(HttpExchange exchange, String path) throws IOException {
-        if (path.equals("/epics")) {
-            String response = gson.toJson(taskManager.getAllEpics());
+        if (path.equals("/subtasks")) {
+            String response = gson.toJson(taskManager.getAllSubtasks());
             sendText(exchange, response);
-        } else if (path.matches("/epics/\\d+")) {
+        } else if (path.matches("/subtasks/\\d+")) {
             int id = Integer.parseInt(path.split("/")[2]);
-            Epic epic = taskManager.getEpicById(id);
-            if (epic != null) {
-                sendText(exchange, gson.toJson(epic));
+            Subtask subtask = taskManager.getSubtaskById(id);
+            if (subtask != null) {
+                sendText(exchange, gson.toJson(subtask));
             } else {
                 sendNotFound(exchange);
             }
-        } else if (path.matches("/epics/\\d+/subtasks")) {
-            int epicId = Integer.parseInt(path.split("/")[2]);
-            List<Subtask> subtasks = taskManager.getSubtasksByEpicId(epicId);
-            sendText(exchange, gson.toJson(subtasks));
         } else {
             sendNotFound(exchange);
         }
@@ -67,28 +61,28 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
 
     private void handlePost(HttpExchange exchange) throws IOException {
         String body = readText(exchange);
-        Epic epic = gson.fromJson(body, Epic.class);
+        Subtask subtask = gson.fromJson(body, Subtask.class);
 
         try {
-            if (epic.getId() == 0) {
-                taskManager.createEpic(epic);
+            if (subtask.getId() == 0) {
+                taskManager.createSubtask(subtask);
                 sendCreated(exchange);
             } else {
-                taskManager.updateEpic(epic);
+                taskManager.updateSubtask(subtask);
                 sendCreated(exchange);
             }
-        } catch (ManagerSaveException | TimeOverlapException e) {
+        } catch (TimeOverlapException e) {
             sendHasInteractions(exchange);
         }
     }
 
     private void handleDelete(HttpExchange exchange, String path) throws IOException {
-        if (path.matches("/epics/\\d+")) {
+        if (path.matches("/subtasks/\\d+")) {
             int id = Integer.parseInt(path.split("/")[2]);
-            taskManager.deleteEpicById(id);
+            taskManager.deleteSubtaskById(id);
             sendCreated(exchange);
-        } else if (path.equals("/epics")) {
-            taskManager.deleteAllEpics();
+        } else if (path.equals("/subtasks")) {
+            taskManager.deleteAllSubtasks();
             sendCreated(exchange);
         } else {
             sendNotFound(exchange);
