@@ -2,14 +2,23 @@ package managers;
 
 import exception.ManagerSaveException;
 import exception.TimeOverlapException;
-import tasks.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
+import tasks.TaskType;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -139,9 +148,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createTask(Task task) throws TimeOverlapException, ManagerSaveException {
+    public Task createTask(Task task) throws TimeOverlapException, ManagerSaveException {
         super.createTask(task);
         save();
+        return task;
     }
 
     @Override

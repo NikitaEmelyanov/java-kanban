@@ -2,9 +2,18 @@ package managers;
 
 import exception.ManagerSaveException;
 import exception.TimeOverlapException;
-import tasks.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -22,9 +31,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Методы для Task
     @Override
-    public void createTask(Task task) throws TimeOverlapException, ManagerSaveException {
+    public Task createTask(Task task) throws TimeOverlapException, ManagerSaveException {
         if (task == null) {
-            return;
+            return task;
         }
         if (hasTimeOverlapWithAny(task)) {
             throw new TimeOverlapException("Задача пересекается по времени с существующей");
@@ -32,6 +41,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(idCounter++);
         tasks.put(task.getId(), task);
         addToPrioritized(task);
+        return task;
     }
 
     @Override
