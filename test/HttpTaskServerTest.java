@@ -15,6 +15,7 @@ import java.net.http.HttpResponse;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HttpTaskServerTest {
+
     private HttpTaskServer server;
     private TaskManager manager;
     private Gson gson;
@@ -44,7 +45,8 @@ class HttpTaskServerTest {
             .uri(URI.create("http://localhost:8080/tasks"))
             .POST(HttpRequest.BodyPublishers.ofString(taskJson))
             .build();
-        HttpResponse<String> postResponse = client.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> postResponse = client.send(postRequest,
+            HttpResponse.BodyHandlers.ofString());
         assertEquals(201, postResponse.statusCode());
 
         Task createdTask = gson.fromJson(postResponse.body(), Task.class);
@@ -55,7 +57,8 @@ class HttpTaskServerTest {
             .uri(URI.create("http://localhost:8080/tasks/" + taskId))
             .GET()
             .build();
-        HttpResponse<String> getResponse = client.send(getRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> getResponse = client.send(getRequest,
+            HttpResponse.BodyHandlers.ofString());
         assertEquals(200, getResponse.statusCode());
 
         Task savedTask = gson.fromJson(getResponse.body(), Task.class);

@@ -9,6 +9,7 @@ import java.util.List;
 import tasks.Task;
 
 public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
+
     private final TaskManager taskManager;
     private final Gson gson;
 

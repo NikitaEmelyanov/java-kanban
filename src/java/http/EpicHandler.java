@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
+
     private final TaskManager taskManager;
     private final Gson gson;
 
@@ -68,13 +69,13 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     private void handlePost(HttpExchange exchange) throws IOException {
         String body = readText(exchange);
         Epic epic = gson.fromJson(body, Epic.class);
-            if (epic.getId() == 0) {
-                taskManager.createEpic(epic);
-                sendCreated(exchange);
-            } else {
-                taskManager.updateEpic(epic);
-                sendCreated(exchange);
-            }
+        if (epic.getId() == 0) {
+            taskManager.createEpic(epic);
+            sendCreated(exchange);
+        } else {
+            taskManager.updateEpic(epic);
+            sendCreated(exchange);
+        }
     }
 
     private void handleDelete(HttpExchange exchange, String path) throws IOException {

@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
+
     private final TaskManager taskManager;
     private final Gson gson;
 
